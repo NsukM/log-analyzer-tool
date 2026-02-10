@@ -1,62 +1,39 @@
-
----
-
-# ✅ README for `log-analyzer-tool`
-
-```md
 # Log Analyzer Tool (Java)
 
-This project is a small Java-based log analysis tool inspired by real-world
-production debugging and incident investigation scenarios.
-
-It simulates how engineers analyze application logs to identify error patterns,
-service-level issues, and recurring failures in distributed systems.
+A lightweight Java utility designed to parse, aggregate, and report on application logs. I built this to simulate the incident investigation workflows used in backend systems—essentially turning raw log data into a readable post-mortem summary.
 
 ---
 
-## What the Tool Does
+## What it does
 
-Given a log file, the analyzer:
-- Parses log entries line by line
-- Counts occurrences of INFO, WARN, and ERROR events
-- Aggregates error messages by frequency
-- Groups errors by service/component
-- Produces a readable summary report in the console
+When pointed at a log file, the tool handles the heavy lifting of:
+* **Parsing:** Breaking down raw strings into structured data (Level, Service, Message).
+* **Counting:** Getting a high-level view of `INFO`, `WARN`, and `ERROR` counts.
+* **Aggregation:** Identifying which services are failing most often and surfacing the most frequent error messages.
+* **Resilience:** It’s built to skip malformed lines rather than crashing, which is critical for real-world logs.
 
----
+## Why I built this
 
-## Motivation
+Logs are the first thing you look at during a "sev-1" production issue. I wanted to build a tool that forced me to think about:
+1.  **Data Extraction:** Handling string manipulation and regex without relying on heavy external libraries.
+2.  **State Management:** Using the right Java Collections (like `HashMap` and `TreeMap`) to keep the analysis efficient.
+3.  **Readability:** Producing an output that an engineer can actually use to diagnose a system in under 10 seconds.
 
-While working with cloud-based and distributed systems, logs are often the first
-and most important source of truth when diagnosing production issues.
+## Sample Input Format
 
-This project was built to strengthen my understanding of:
-- Log-driven debugging
-- Data aggregation using core data structures
-- Defensive parsing of imperfect input
-- Writing maintainable, readable backend utilities
+The analyzer expects a standard log format, though it's flexible with spacing:
+`2026-02-10T14:30:00Z ERROR PaymentService - Connection refused requestId=8821`
 
 ---
 
-The tool is tolerant of minor formatting differences and safely ignores malformed
-lines.
+## Getting Started
 
----
+### Prerequisites
+* JDK 11 or higher
 
-## Design Choices
-
-- Uses standard Java collections (`Map`, `List`)
-- Avoids external libraries to focus on fundamentals
-- Separates parsing, aggregation, and reporting logic
-- Favors clarity and robustness over over-optimization
-
----
-
-## How to Run
+### Usage
+Compile the source and run it against your target log file:
 
 ```bash
 javac src/LogAnalyzer.java
-java -cp src LogAnalyzer logs/sample.log
-
-## Example Log Format
-
+java -cp src LogAnalyzer path/to/your/app.log
